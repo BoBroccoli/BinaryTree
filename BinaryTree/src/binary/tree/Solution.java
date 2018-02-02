@@ -1,5 +1,9 @@
 package binary.tree;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
 public class Solution {
 	public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
 		if (root == null || root == p || root == q) {
@@ -44,8 +48,9 @@ public class Solution {
 	public boolean isBalanced(TreeNode root) {
 		if (root == null)
 			return true;
-		if (Math.abs(depthOfTree(root.left) - depthOfTree(root.right)) <= 1 && isBalanced(root.left) && isBalanced(root.right))
-			//pass boolean to the upper function, put into if connect with &&
+		if (Math.abs(depthOfTree(root.left) - depthOfTree(root.right)) <= 1 && isBalanced(root.left)
+				&& isBalanced(root.right))
+			// pass boolean to the upper function, put into if connect with &&
 			return true;
 		else
 			return false;
@@ -54,6 +59,100 @@ public class Solution {
 	public int depthOfTree(TreeNode root) {
 		if (root == null)
 			return 0;
-		return Math.max(depthOfTree(root.left), depthOfTree(root.right))+1;//important! 
+		return Math.max(depthOfTree(root.left), depthOfTree(root.right)) + 1;// important!
+	}
+
+	public List<List<Integer>> levelOrder(TreeNode root) {
+		LinkedList<TreeNode> track = new LinkedList<>();
+		List<List<Integer>> result = new ArrayList<>();
+		if (root == null)
+			return result;
+		track.add(root);
+		while (!track.isEmpty()) {
+			List<Integer> aList = new ArrayList<>();
+			int queueSize = track.size();
+			for (int n = 0; n < queueSize; n++) {
+				// Remember!!!!! queue size changes inside loop so make sure initial var can
+				// hold
+				// size of it
+				TreeNode node = track.pop();
+				if (node.left != null) {
+					TreeNode left = node.left;
+					track.addLast(left);
+				}
+				if (node.right != null) {
+					TreeNode right = node.right;
+					track.addLast(right);
+				}
+				aList.add((Integer) node.val);
+			}
+			result.add(aList);
+		}
+		return result;
+	}
+
+	public boolean isValidBST(TreeNode root) {
+		if (root == null) {
+			return true;
+		}
+		List<Integer> list = new ArrayList<>();
+		DFS(list, root);
+		for (int i = 0; i < list.size() - 1; i++) {
+			if (list.get(i) >= list.get(i + 1)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public void DFS(List<Integer> list, TreeNode root) {
+		if (root == null) {
+			return;
+		} else {
+			DFS(list, root.left);
+			list.add(root.val);
+			DFS(list, root.right);
+		}
+	}
+
+	public TreeNode insertNode(TreeNode root, TreeNode node) {
+		if (root == null)
+			return node;
+		if (root.val > node.val) {
+			root.left = insertNode(root.left, node);
+
+		} else if (root.val < node.val) {
+			root.right = insertNode(root.right, node);
+		}
+		return root;
+	}
+
+	public List<Integer> searchRange(TreeNode root, int k1, int k2) {
+		List<Integer> list = new ArrayList<>();
+		List<Integer> returnList = new ArrayList<>();
+		if (root == null)
+			return list;
+		list = DFS(root, list);
+		for (Integer integer : list) {
+			if (integer >= k1 && integer <= k2)
+				returnList.add(integer);
+		}
+		return returnList;
+	}
+
+	public List<Integer> DFS(TreeNode root, List<Integer> list) {
+		if (root == null)
+			return list;
+		DFS(root.left, list);
+		list.add(root.val);
+		DFS(root.right, list);
+		return list;
+	}
+
+	public int sumNumbers(TreeNode root) {
+		if (root == null)
+			return 0;
+		int result = 0;
+		return result;
 	}
 }
