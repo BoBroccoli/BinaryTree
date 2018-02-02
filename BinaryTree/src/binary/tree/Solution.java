@@ -149,10 +149,37 @@ public class Solution {
 		return list;
 	}
 
+	// such pain!!!
 	public int sumNumbers(TreeNode root) {
 		if (root == null)
 			return 0;
 		int result = 0;
+
+		result = sumHelper(root, result);
+
 		return result;
+	}
+
+	public int sumHelper(TreeNode root, int i) {
+		if (root == null) {
+			return 0;
+		}
+		i = i * 10 + root.val;
+		if (root.left == null && root.right == null) {
+			return i;
+		}
+		int left = sumHelper(root.left, i);
+		int right = sumHelper(root.right, i);
+		return left + right;
+	}
+
+	public boolean hasPathSum(TreeNode root, int sum) {
+		if (root == null ){
+			return false;
+		}
+		if (root.val == sum && root.left == null && root.right == null) {
+			return true;
+		}
+		return hasPathSum(root.left, sum-root.val) || hasPathSum(root.right, sum-root.val);
 	}
 }
